@@ -3,11 +3,14 @@ public class User {
     private Message[] msgList;
     private int nMsg = 0;
     private int nFile = 0;
-    private int avgMsgPerHour = 0;
+    private int avgMsgPerHour[];
 
     public User(String name) {
         this.name = name;
         msgList = new Message[50];
+        avgMsgPerHour = new int[23];
+        for (int i = 0; i < avgMsgPerHour.length; i++)
+            avgMsgPerHour[i] = 0;
     }
 
     public void addMsg(Message msg) {
@@ -27,7 +30,4 @@ public class User {
         for (int i = 0; i < nMsg; i++)
             System.out.println(msgList[i].toString());
     }
-
-    private
-
 }
