@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Message {
     private String line, user, msg;
     private int hour, minute, day, month, year;
+    private boolean isFile;
 
     public Message(String line) {
         this.line = line;
@@ -10,10 +11,10 @@ public class Message {
 
     public void analise() {
         //EXAMPLE ->        24/07/2018, 21:37 - Pedro: Buenas Francisco Aguilera, estoy en un restaurante\n Espero que no te importe
-
         System.out.println("ANALYSING-> " + line);
 
         Scanner sc = new Scanner(line).useDelimiter("\\s*/\\s*|\\s*,\\s*|\\s*:\\s*|\\s*-\\s");
+
         //date
         day = sc.nextInt();
         month = sc.nextInt();
@@ -29,6 +30,13 @@ public class Message {
         //message
         msg = line.substring(line.lastIndexOf(":") + 1);
         msg = msg.replace("\n", ".");
+        if (msg.contains("<Media omitted>")) {
+            isFile = true;
+        }
+    }
+
+    public boolean isFile() {
+        return isFile;
     }
 
     @Override
