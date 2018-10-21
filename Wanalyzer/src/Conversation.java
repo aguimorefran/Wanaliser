@@ -27,7 +27,7 @@ public class Conversation {
         while ((line = br.readLine()) != null) {
             msg = new Message(line);
             //discards null msgs and rubbish msgs
-            if (line.length() < 1 || line.charAt(2) != '/')
+            if (line.length() < 1 || line.charAt(2) != '/' || line.charAt(0) == '[')
                 ;
             else {
                 //analise the message
@@ -79,21 +79,29 @@ public class Conversation {
             sb.append("\n");
         }
         for (int i = 0; i < nUsers; i++) {
-            sb.append("Avg msgs per hour by " + userList[i].getName() + ":\n");
+            sb.append("Total msgs per hour by " + userList[i].getName() + ":\n");
             for (int j = 0; j <= 23; j++)
                 sb.append("\t" + j + "= " + userList[i].getMsgPerHour()[j] + "\n");
             sb.append("\n");
         }
         for (int i = 0; i < nUsers; i++) {
-            sb.append("Avg files per hour by " + userList[i].getName() + ":\n");
-            for (int j = 0; j <= 23; j++)
-                sb.append("\t" + j + "= " + userList[i].getFilePerHour()[j] + "\n");
+            userList[i].calcAvg();
+            sb.append("Total msgs per day of week by " + userList[i].getName() + ":\n");
+            for (int j = 0; j < 7; j++)
+                sb.append("\t" + (j+1) + "= " + userList[i].getAvgMsgPerDay()[j] + "\n");
             sb.append("\n");
         }
         for (int i = 0; i < nUsers; i++) {
-            sb.append("Avg msgs per day by " + userList[i].getName() + ":\n");
-            for (int j = 0; j <= 23; j++)
-                sb.append("\t" + j + "= " + userList[i].getMsgPerDay()[j] + "\n");
+            userList[i].calcAvg();
+            sb.append("Avg msgs per hour of day by " + userList[i].getName() + ":\n");
+            for (int j = 0; j < 24; j++)
+                sb.append("\t" + j + "= " + userList[i].getAvgMsgPerHour()[j] + "\n");
+            sb.append("\n");
+        }
+        for (int i = 0; i < nUsers; i++) {
+            userList[i].calcAvg();
+            sb.append("Avg words per msg by " + userList[i].getName() + "= ");
+            sb.append(userList[i].getAvgWordsPerMsg());
             sb.append("\n");
         }
 

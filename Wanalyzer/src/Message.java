@@ -1,8 +1,15 @@
 import java.util.Scanner;
+import java.util.Calendar;
 
 public class Message {
     private String line, user, msg;
-    private int hour, minute, day, month, year;
+    private int hour;
+    private int minute;
+    private int day;
+    private int month;
+    private int year;
+    private int dayOfWeek;
+    private int words;
     private boolean isFile;
 
     public Message(String line) {
@@ -14,11 +21,14 @@ public class Message {
         System.out.println("ANALYSING-> " + line);
 
         Scanner sc = new Scanner(line).useDelimiter("\\s*/\\s*|\\s*,\\s*|\\s*:\\s*|\\s*-\\s");
+        Calendar c = Calendar.getInstance();
 
         //date
         day = sc.nextInt();
         month = sc.nextInt();
         year = sc.nextInt();
+        c.set(year, month, day);
+        dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 
         //time
         hour = sc.nextInt();
@@ -30,9 +40,46 @@ public class Message {
         //message
         msg = line.substring(line.lastIndexOf(":") + 1);
         msg = msg.replace("\n", ".");
-        if (msg.contains("<Media omitted>")) {
+        if (msg.contains("<Media omitted>"))
             isFile = true;
+
+        words = countWords(msg);
+
+    }
+
+    public int getWords() {
+        return words;
+    }
+
+    private int countWords(String s) {
+        int wordCount = 0;
+        boolean word = false;
+        int endOfLine = s.length() - 1;
+
+        for (int i = 0; i < s.length(); i++) {
+            // if the char is a letter, word = true.
+            if (Character.isLetter(s.charAt(i)) && i != endOfLine) {
+                word = true;
+                // if char isn't a letter and there have been letters before,
+                // counter goes up.
+            } else if (!Character.isLetter(s.charAt(i)) && word) {
+                wordCount++;
+                word = false;
+                // last word of String; if it doesn't end with a non letter, it
+                // wouldn't count without this.
+            } else if (Character.isLetter(s.charAt(i)) && i == endOfLine) {
+                wordCount++;
+            }
         }
+        return wordCount;
+    }
+
+    public String getLine() {
+        return line;
+    }
+
+    public int getDayOfWeek() {
+        return dayOfWeek;
     }
 
     public boolean isFile() {

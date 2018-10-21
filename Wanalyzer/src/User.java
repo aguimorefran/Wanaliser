@@ -1,3 +1,6 @@
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 public class User {
     private String name;
     private Message[] msgList;
@@ -7,6 +10,9 @@ public class User {
     private int filePerHour[];
     private int msgPerDay[];
     private int responseTime[];
+    private long avgMsgPerDay[];
+    private long avgMsgPerHour[];
+    private int avgWordsPerMsg;
 
     public User(String name) {
         this.name = name;
@@ -15,15 +21,56 @@ public class User {
         filePerHour = new int[24];
         responseTime = new int[5];
         msgPerDay = new int[7];
-        for (int i = 0; i < msgPerHour.length; i++)
+        avgMsgPerDay = new long[7];
+        avgMsgPerHour = new long[24];
+        for (int i = 0; i < msgPerHour.length; i++) {
             msgPerHour[i] = 0;
+            avgMsgPerHour[i] = 0;
+        }
         for (int i = 0; i < filePerHour.length; i++)
             filePerHour[i] = 0;
         for (int i = 0; i < responseTime.length; i++)
             responseTime[i] = 0;
-        for (int i = 0; i < msgPerDay.length; i++)
+        for (int i = 0; i < msgPerDay.length; i++) {
             msgPerDay[i] = 0;
+            avgMsgPerDay[i] = 0;
+        }
+    }
 
+    public int getAvgWordsPerMsg() {
+        return avgWordsPerMsg;
+    }
+
+    public long[] getAvgMsgPerDay() {
+        return avgMsgPerDay;
+    }
+
+    public void calcAvg() {
+        //Avg msgs per day of week
+        //get first and last day, get n of days, get n of weeks (days/7) and do simple math
+        Message m = msgList[0];
+        Date first = new Date(m.getYear(), m.getMonth(), m.getDay());
+        m = msgList[nMsg - 1];
+        Date last = new Date(m.getYear(), m.getMonth(), m.getDay());
+        long days = TimeUnit.DAYS.convert(last.getTime() - first.getTime(), TimeUnit.MILLISECONDS);
+        for (int i = 0; i < 7; i++) {
+            if (days > 0 && msgPerDay[i] > 0)
+                avgMsgPerDay[i] = msgPerDay[i] / (days / 7);
+        }
+
+        //Avg msgs per active hour of the day
+        for (int i = 0; i < 24; i++)
+            avgMsgPerHour[i] = msgPerHour[i] / days;
+
+        //avg words per message
+        int sum = 0;
+        for (int i = 0; i < nMsg; i++)
+            sum += msgList[i].getWords();
+        avgWordsPerMsg = sum / nMsg;
+    }
+
+    public long[] getAvgMsgPerHour() {
+        return avgMsgPerHour;
     }
 
     public void addMsg(Message msg) {
@@ -41,8 +88,9 @@ public class User {
             }
         }
         //add msg to day of the week
-        //1. see which day of the week is by date dd/mm/yyyy
-        //TODO: HOLA
+        for (int i = 0; i < 7; i++)
+            if (i == msg.getDayOfWeek())
+                msgPerDay[i]++;
     }
 
     public int[] getMsgPerDay() {
