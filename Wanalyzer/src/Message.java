@@ -1,14 +1,12 @@
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
 import java.util.Scanner;
 import java.util.Calendar;
 
 public class Message {
     private String line, user, msg;
-    private int hour;
-    private int minute;
-    private int day;
-    private int month;
-    private int year;
-    private int dayOfWeek;
+    private DateTime date;
     private int words;
     private boolean isFile;
 
@@ -18,21 +16,21 @@ public class Message {
 
     public void analise() {
         //EXAMPLE ->        24/07/2018, 21:37 - Pedro: Buenas Francisco Aguilera, estoy en un restaurante\n Espero que no te importe
-        System.out.println("ANALYSING-> " + line);
+        //System.out.println("ANALYSING-> " + line);
 
         Scanner sc = new Scanner(line).useDelimiter("\\s*/\\s*|\\s*,\\s*|\\s*:\\s*|\\s*-\\s");
-        Calendar c = Calendar.getInstance();
 
         //date
-        day = sc.nextInt();
-        month = sc.nextInt();
-        year = sc.nextInt();
-        c.set(year, month, day);
-        dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
+        int day = sc.nextInt();
+        int month = sc.nextInt();
+        int year = sc.nextInt();
 
         //time
-        hour = sc.nextInt();
-        minute = sc.nextInt();
+        int hour = sc.nextInt();
+        int minute = sc.nextInt();
+
+        date = new DateTime(year, month, day, hour, minute);
+
         //user
         user = sc.next();
         sc.close();
@@ -78,9 +76,15 @@ public class Message {
         return line;
     }
 
-    public int getDayOfWeek() {
-        return dayOfWeek;
+    public DateTime getDate(){
+        return date;
     }
+
+
+    public int getDayOfWeek() {
+        return date.getDayOfWeek()-1;
+    }
+
 
     public boolean isFile() {
         return isFile;
@@ -88,7 +92,11 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message= {'" + msg + '\'' + '}';
+        return printDate() + "Message= {'" + msg + '}';
+    }
+
+    private String printDate(){
+        return date.toString();
     }
 
     public String getUser() {
@@ -100,22 +108,22 @@ public class Message {
     }
 
     public int getHour() {
-        return hour;
+        return date.getHourOfDay();
     }
 
     public int getMinute() {
-        return minute;
+        return date.getMinuteOfHour();
     }
 
     public int getDay() {
-        return day;
+        return date.getDayOfMonth();
     }
 
     public int getMonth() {
-        return month;
+        return date.getMonthOfYear();
     }
 
     public int getYear() {
-        return year;
+        return date.getYear();
     }
 }

@@ -1,0 +1,153 @@
+
+-------
+USERS= Fco, Lau🌸, 
+
+Conversation taken beetween 
+Tuesday, 24 July 2018
+Monday, 15 October 2018
+N total msgs= 39999
+
+N messages by Fco= 21405
+N messages by Lau🌸= 18594
+N total files= 1659
+N files by Fco= 829
+N files by Lau🌸= 830
+Total msgs per hour by Fco:
+	0h= 1741
+	1h= 644
+	2h= 161
+	3h= 12
+	4h= 0
+	5h= 10
+	6h= 10
+	7h= 63
+	8h= 219
+	9h= 320
+	10h= 611
+	11h= 1200
+	12h= 1199
+	13h= 1182
+	14h= 1258
+	15h= 1361
+	16h= 1090
+	17h= 1098
+	18h= 1264
+	19h= 1081
+	20h= 1394
+	21h= 1480
+	22h= 1508
+	23h= 1670
+
+Total msgs per hour by Lau🌸:
+	0h= 1562
+	1h= 644
+	2h= 141
+	3h= 9
+	4h= 1
+	5h= 7
+	6h= 17
+	7h= 40
+	8h= 177
+	9h= 264
+	10h= 540
+	11h= 1046
+	12h= 997
+	13h= 1035
+	14h= 1093
+	15h= 1163
+	16h= 868
+	17h= 961
+	18h= 1097
+	19h= 973
+	20h= 1223
+	21h= 1192
+	22h= 1233
+	23h= 1481
+
+Total msgs per day of week by Fco:
+	MONDAY= 267
+	TUESDAY= 253
+	WEDNESDAY= 342
+	THURSDAY= 266
+	FRIDAY= 246
+	SATURDAY= 254
+	SUNDAY= 316
+
+Total msgs per day of week by Lau🌸:
+	MONDAY= 233
+	TUESDAY= 220
+	WEDNESDAY= 313
+	THURSDAY= 218
+	FRIDAY= 208
+	SATURDAY= 217
+	SUNDAY= 278
+
+Avg msgs per hour of day by Fco:
+	0h= 20
+	1h= 7
+	2h= 1
+	3h= 0
+	4h= 0
+	5h= 0
+	6h= 0
+	7h= 0
+	8h= 2
+	9h= 3
+	10h= 7
+	11h= 14
+	12h= 14
+	13h= 14
+	14h= 15
+	15h= 16
+	16h= 13
+	17h= 13
+	18h= 15
+	19h= 13
+	20h= 16
+	21h= 17
+	22h= 18
+	23h= 20
+
+Avg msgs per hour of day by Lau🌸:
+	0h= 18
+	1h= 7
+	2h= 1
+	3h= 0
+	4h= 0
+	5h= 0
+	6h= 0
+	7h= 0
+	8h= 2
+	9h= 3
+	10h= 6
+	11h= 12
+	12h= 12
+	13h= 12
+	14h= 13
+	15h= 14
+	16h= 10
+	17h= 11
+	18h= 13
+	19h= 11
+	20h= 14
+	21h= 14
+	22h= 14
+	23h= 17
+
+Avg words per msg by Fco= 4
+Avg words per msg by Lau🌸= 3
+Most active day: Sunday, 14 October 2018
+Most relevant words by Fco:
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Most relevant words by Lau🌸:
+1: 
+2: 
+3: 
+4: 
+5: 
+
