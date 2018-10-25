@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class User {
@@ -17,9 +17,7 @@ public class User {
     private long avgMsgPerDay[];
     private long avgMsgPerHour[];
     private int avgWordsPerMsg;
-    private String idfWords[];
-    private String wordList[];
-    private int nWords = 0;
+    private HashMap<String, Integer> wordList;
 
     public User(String name) {
         this.name = name;
@@ -30,8 +28,6 @@ public class User {
         msgPerDay = new int[7];
         avgMsgPerDay = new long[7];
         avgMsgPerHour = new long[24];
-        idfWords = new String[5];
-        wordList = new String[100];
 
         for (int i = 0; i < msgPerHour.length; i++) {
             msgPerHour[i] = 0;
@@ -44,50 +40,6 @@ public class User {
         for (int i = 0; i < msgPerDay.length; i++) {
             msgPerDay[i] = 0;
             avgMsgPerDay[i] = 0;
-        }
-        for (int i = 0; i < idfWords.length; i++)
-            idfWords[i] = "";
-
-    }
-
-    public String[] getIdfWords() {
-        return idfWords;
-    }
-
-    public int getAvgWordsPerMsg() {
-        return avgWordsPerMsg;
-    }
-
-    public long[] getAvgMsgPerDay() {
-        return avgMsgPerDay;
-    }
-
-
-    boolean checkWord(String word) throws IOException {
-        boolean ok = false;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader("src/alphabet.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        String line;
-        //reads line by line the txt file
-
-        while ((line = br.readLine()) != null && !ok) {
-            if (word.equalsIgnoreCase(line))
-                ok = true;
-        }
-
-        return ok;
-    }
-
-    public void addWord(String word) throws IOException {
-        if (checkWord(word)) {
-            if (nWords == wordList.length)
-                java.util.Arrays.copyOf(wordList, wordList.length + (wordList.length / 2));
-            wordList[nWords] = word;
-            nWords++;
         }
     }
 
@@ -115,10 +67,6 @@ public class User {
         avgWordsPerMsg = sum / nMsg;
     }
 
-    public long[] getAvgMsgPerHour() {
-        return avgMsgPerHour;
-    }
-
     public void addMsg(Message msg) {
         //check if array is full. if so, make it bigger
         if (msgList.length == nMsg)
@@ -139,21 +87,54 @@ public class User {
                 msgPerDay[i]++;
     }
 
-    public int[] getMsgPerDay() {
-        return msgPerDay;
-    }
-
-    public int[] getResponseTime() {
-        return responseTime;
-    }
-
-    public void addFile() {
-        nFile++;
-    }
-
     public void printAllMessages() {
         for (int i = 0; i < nMsg; i++)
             System.out.println(msgList[i].toString());
+    }
+
+    boolean checkWord(String word) throws IOException {
+        boolean ok = false;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("src/alphabet.txt"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String line;
+        //reads line by line the txt file
+
+        while ((line = br.readLine()) != null && !ok) {
+            if (word.equalsIgnoreCase(line))
+                ok = true;
+        }
+
+        return ok;
+    }
+
+    private static HashMap sortByValues(HashMap map) {
+        List list = new LinkedList(map.entrySet());
+        // Defined Custom Comparator here
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o1)).getValue())
+                        .compareTo(((Map.Entry) (o2)).getValue());
+            }
+        });
+
+        HashMap sortedHashMap = new LinkedHashMap();
+        for (Iterator it = list.iterator(); it.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) it.next();
+            sortedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedHashMap;
+    }
+
+    public int getnWords() {
+        return wordList.size();
+    }
+
+    public long[] getAvgMsgPerHour() {
+        return avgMsgPerHour;
     }
 
     public String getName() {
@@ -178,5 +159,25 @@ public class User {
 
     public int[] getFilePerHour() {
         return filePerHour;
+    }
+
+    public int getAvgWordsPerMsg() {
+        return avgWordsPerMsg;
+    }
+
+    public long[] getAvgMsgPerDay() {
+        return avgMsgPerDay;
+    }
+
+    public int[] getMsgPerDay() {
+        return msgPerDay;
+    }
+
+    public int[] getResponseTime() {
+        return responseTime;
+    }
+
+    public void addFile() {
+        nFile++;
     }
 }

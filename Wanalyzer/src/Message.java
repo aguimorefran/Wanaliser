@@ -45,10 +45,6 @@ public class Message {
 
     }
 
-    public int getWords() {
-        return words;
-    }
-
     private int countWords(String s) {
         int wordCount = 0;
         boolean word = false;
@@ -125,5 +121,9 @@ public class Message {
 
     public int getYear() {
         return date.getYear();
+    }
+
+    public int getWords() {
+        return words;
     }
 }

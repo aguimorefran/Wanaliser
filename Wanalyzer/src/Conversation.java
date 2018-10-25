@@ -125,13 +125,7 @@ public class Conversation {
             sb.append("\n");
         }
         sb.append("\nMost active day: " + mostActiveDay + "\n");
-        for (int i = 0; i < nUsers; i++) {
-            sb.append("Most relevant words by " + userList[i].getName() + ":\n");
-            for (int j = 0; j < 5; j++) {
-                sb.append((j+1) + ": " + userList[i].getIdfWords()[j] + "\n");
-            }
-            sb.append("\n");
-        }
+
 
         return sb.toString();
     }

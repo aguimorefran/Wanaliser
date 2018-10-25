@@ -136,6 +136,7 @@ Avg msgs per hour of day by Lau🌸:
 
 Avg words per msg by Fco= 4
 Avg words per msg by Lau🌸= 3
+
 Most active day: Sunday, 14 October 2018
 Most relevant words by Fco:
 1: 
