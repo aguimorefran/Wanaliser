@@ -63,12 +63,10 @@ public class Conversation {
         System.out.println(this.toString());
 
         //idf
-        /*for (int i = 0; i < nUsers; i++) {
-            userList[i].calcIDF();
-        }*/
+        //first organize wordlist in everyuser
+        for (User u : userList)
+            u.createWordList();
 
-        //to file
-        toFile();
     }
 
     @Override
@@ -93,9 +91,9 @@ public class Conversation {
         sb.append(nFiles);
         sb.append("\n");
 
-        for (int i = 0; i < nUsers; i++) {
-            sb.append("N files by " + userList[i].getName() + "= ");
-            sb.append(userList[i].getnFile());
+        for (User u : userList) {
+            sb.append("N files by " + u.getName() + "= ");
+            sb.append(u.getnFile());
             sb.append("\n");
         }
         for (int i = 0; i < nUsers; i++) {
@@ -130,7 +128,7 @@ public class Conversation {
         return sb.toString();
     }
 
-    private void toFile() {
+    public void toFile() {
         try {
             PrintWriter out = new PrintWriter("output.txt");
             out.print(toString());

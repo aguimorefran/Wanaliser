@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class User {
@@ -17,7 +20,8 @@ public class User {
     private long avgMsgPerDay[];
     private long avgMsgPerHour[];
     private int avgWordsPerMsg;
-    private HashMap<String, Integer> wordList;
+    private List<String> wordList;
+    List<List<String>> documents;
 
     public User(String name) {
         this.name = name;
@@ -41,7 +45,27 @@ public class User {
             msgPerDay[i] = 0;
             avgMsgPerDay[i] = 0;
         }
+
+        wordList = new ArrayList<String>();
     }
+
+    public void createWordList() throws IOException {
+        for (int i = 0; i < nMsg; i++) {
+            Scanner sc = new Scanner(msgList[i].getMsg());
+            while (sc.hasNext()) {
+                String word = sc.next().toLowerCase();
+                if (checkWord(word) && !wordList.contains(word)) {
+                    wordList.add(word);
+                }
+            }
+            sc.close();
+        }
+        System.out.println("Wordlist for " + name + " created with " + wordList.size() + " words");
+        System.out.println(wordList.toString());
+
+
+    }
+
 
     public void calcAvg() {
         //Avg msgs per day of week
@@ -109,24 +133,6 @@ public class User {
         }
 
         return ok;
-    }
-
-    private static HashMap sortByValues(HashMap map) {
-        List list = new LinkedList(map.entrySet());
-        // Defined Custom Comparator here
-        Collections.sort(list, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Comparable) ((Map.Entry) (o1)).getValue())
-                        .compareTo(((Map.Entry) (o2)).getValue());
-            }
-        });
-
-        HashMap sortedHashMap = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) it.next();
-            sortedHashMap.put(entry.getKey(), entry.getValue());
-        }
-        return sortedHashMap;
     }
 
     public int getnWords() {
