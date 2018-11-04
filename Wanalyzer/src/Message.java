@@ -45,6 +45,9 @@ public class Message {
 
     }
 
+    /*
+    Count all words in the message
+     */
     private int countWords(String s) {
         int wordCount = 0;
         boolean word = false;

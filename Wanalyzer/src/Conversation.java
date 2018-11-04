@@ -59,13 +59,10 @@ public class Conversation {
         //calc nDays
         nDays = Days.daysBetween(msgList[0].getDate(), msgList[nMsg - 1].getDate()).getDays();
 
-        //print conversation msg list
-        System.out.println(this.toString());
-
         //idf
-        //first organize wordlist in everyuser
         for (User u : userList)
-            u.createWordList();
+            u.calcTFIDF();
+
 
     }
 
@@ -124,10 +121,21 @@ public class Conversation {
         }
         sb.append("\nMost active day: " + mostActiveDay + "\n");
 
+        for (User u : userList) {
+            sb.append("Most relevant words for " + u.getName() + ":");
+            for (int i = 0; i < u.getWordList().size(); i++) {
+                Word foo = u.getRelevantWords()[i];
+                sb.append("\n" + foo.getWord() + ": " + foo.getValue());
+            }
+        }
+
 
         return sb.toString();
     }
 
+    /*
+    Write analysis to file
+     */
     public void toFile() {
         try {
             PrintWriter out = new PrintWriter("output.txt");
@@ -138,6 +146,9 @@ public class Conversation {
         }
     }
 
+    /*
+    Calculate most active day
+     */
     private void calcMostActiveDay() {
         int max = 0;
         int count = 0;
@@ -159,6 +170,9 @@ public class Conversation {
         mostActiveDay = date;
     }
 
+    /*
+    Adds user to conversation users
+     */
     private void addUser(String username) {
         if (nUsers == userList.length) {
             userList = java.util.Arrays.copyOf(userList, userList.length + (userList.length / 2));
@@ -167,6 +181,9 @@ public class Conversation {
         nUsers++;
     }
 
+    /*
+    Checks if user exists
+     */
     private boolean userExists(String username) {
         boolean exists = false;
         for (int i = 0; i < nUsers; i++) {
@@ -178,6 +195,9 @@ public class Conversation {
         return exists;
     }
 
+    /*
+    Adds msg to conversation
+     */
     private void addMsg(Message msg) {
         //check if array is full. if so, make it bigger
         if (msgList.length == nMsg)
@@ -186,12 +206,18 @@ public class Conversation {
         nMsg++;
     }
 
+    /*
+    Adds msg to the user msg list
+     */
     private void addMsgToUser(String username, Message m) {
         for (int i = 0; i < nUsers; i++)
             if (username.equals(userList[i].getName()))
                 userList[i].addMsg(m);
     }
 
+    /*
+    Same with file
+     */
     private void addFileToUser(String username) {
         for (int i = 0; i < nUsers; i++)
             if (username.equals(userList[i].getName()))

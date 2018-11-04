@@ -21,7 +21,9 @@ public class User {
     private long avgMsgPerHour[];
     private int avgWordsPerMsg;
     private List<String> wordList;
-    List<List<String>> documents;
+    private List<List<String>> documents;
+    private Word[] relevantWords;
+
 
     public User(String name) {
         this.name = name;
@@ -47,6 +49,45 @@ public class User {
         }
 
         wordList = new ArrayList<String>();
+        relevantWords = new Word[100];
+    }
+
+    public void calcTFIDF() throws IOException {
+        /*
+        First calc tfidf of everyword
+         */
+        createWordList();
+        int m = 0;
+        TFIDFCalculator tfidf = new TFIDFCalculator();
+        for (String s : wordList) {
+            double total = 0;
+            double avg = 0;
+            int n = 0;
+            for (List doc : documents) {
+                total = tfidf.tfIdf(doc, documents, s);
+                n++;
+                avg += total;
+            }
+
+            if (relevantWords.length == m)
+                relevantWords = java.util.Arrays.copyOf(relevantWords, relevantWords.length + (relevantWords.length / 2));
+
+            relevantWords[m] = new Word(s, avg / n);
+            m++;
+        }
+
+        /*
+        Then sort them
+         */
+        for (int i = 0; i < m - 1; i++) {
+            for (int j = 0; j < m - 1 - i; j++) {
+                if (relevantWords[j].getValue() < relevantWords[j + 1].getValue()) {
+                    Word foo = relevantWords[j];
+                    relevantWords[j] = relevantWords[j + 1];
+                    relevantWords[j + 1] = foo;
+                }
+            }
+        }
     }
 
     public void createWordList() throws IOException {
@@ -60,10 +101,8 @@ public class User {
             }
             sc.close();
         }
-        System.out.println("Wordlist for " + name + " created with " + wordList.size() + " words");
-        System.out.println(wordList.toString());
-
-
+        //System.out.println("Wordlist for " + name + " created with " + wordList.size() + " words");
+        //System.out.println(wordList.toString());
     }
 
 
@@ -133,6 +172,14 @@ public class User {
         }
 
         return ok;
+    }
+
+    public List<String> getWordList() {
+        return wordList;
+    }
+
+    public Word[] getRelevantWords() {
+        return relevantWords;
     }
 
     public int getnWords() {

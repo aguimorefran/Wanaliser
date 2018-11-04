@@ -1,5 +1,3 @@
-package com.guendouz.textclustering.preprocessing;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,6 +49,11 @@ public class TFIDFCalculator {
     }
 
     public static void main(String[] args) {
+        Word[] wordList = new Word[20];
+        int m = 0;
+
+        List<String> words = Arrays.asList("Lorem", "dolor", "sit", "ipsum", "Vituperata", "incorrupte", "at", "pro", "quo"
+                , "Has", "persius", "disputationi", "id", "simul");
 
         List<String> doc1 = Arrays.asList("Lorem", "ipsum", "dolor", "ipsum", "sit", "ipsum");
         List<String> doc2 = Arrays.asList("Vituperata", "incorrupte", "at", "ipsum", "pro", "quo");
@@ -59,10 +62,36 @@ public class TFIDFCalculator {
 
         TFIDFCalculator calculator = new TFIDFCalculator();
         double tfidf = calculator.tfIdf(doc1, documents, "ipsum");
-        System.out.println("TF-IDF (ipsum) = " + tfidf);
+        //System.out.println("TF-IDF (ipsum) = " + tfidf);
 
+        for (String s : words) {
+            double avg = 0;
+            int n = 0;
+            for (List doc : documents) {
+                double total = calculator.tfIdf(doc, documents, s);
+
+                n++;
+                avg += total;
+
+            }
+
+            wordList[m] = new Word(s, avg / n);
+            m++;
+        }
+
+        for (int i = 0; i < m - 1; i++) {
+            for (int j = 0; j < m - i - 1; j++) {
+                if (wordList[j].getValue() < wordList[j + 1].getValue()) {
+                    Word foo = wordList[j];
+                    wordList[j] = wordList[j + 1];
+                    wordList[j + 1] = foo;
+                }
+            }
+        }
+
+        for (int i = 0; i < 5; i++)
+            System.out.println(wordList[i].toString());
 
     }
-
 
 }
