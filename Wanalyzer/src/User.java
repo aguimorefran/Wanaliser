@@ -1,11 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class User {
@@ -50,59 +44,70 @@ public class User {
 
         wordList = new ArrayList<String>();
         relevantWords = new Word[100];
+        documents = new ArrayList<List<String>>();
     }
 
     public void calcTFIDF() throws IOException {
         /*
-        First calc tfidf of everyword
+        First calc tfidf of every word
          */
         createWordList();
         int m = 0;
+        Double k = 0.0;
         TFIDFCalculator tfidf = new TFIDFCalculator();
+        System.out.println("Comparing " + wordList.size() + " words");
         for (String s : wordList) {
-            double total = 0;
+            k++;
+            if (k % 10 == 0)
+                System.out.println((k / wordList.size()) * 100 + "%");
             double avg = 0;
-            int n = 0;
+            int j = 0;
             for (List doc : documents) {
-                total = tfidf.tfIdf(doc, documents, s);
-                n++;
-                avg += total;
+                double n = tfidf.tfIdf(doc, documents, s);
+                if (!Double.isNaN(n)) {
+                    avg += n;
+                    if (n > 0)
+                        j++;
+                }
             }
 
             if (relevantWords.length == m)
-                relevantWords = java.util.Arrays.copyOf(relevantWords, relevantWords.length + (relevantWords.length / 2));
+                relevantWords = java.util.Arrays.copyOf(relevantWords, relevantWords.length + 1);
 
-            relevantWords[m] = new Word(s, avg / n);
+            relevantWords[m] = new Word(s, avg / j);
+            //System.out.println("Word added: " + s + "/" + avg);
             m++;
         }
 
         /*
         Then sort them
          */
-        for (int i = 0; i < m - 1; i++) {
-            for (int j = 0; j < m - 1 - i; j++) {
-                if (relevantWords[j].getValue() < relevantWords[j + 1].getValue()) {
-                    Word foo = relevantWords[j];
-                    relevantWords[j] = relevantWords[j + 1];
-                    relevantWords[j + 1] = foo;
-                }
+        Arrays.sort(relevantWords, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getValue().compareTo(o2.getValue());
             }
-        }
+        });
     }
 
     public void createWordList() throws IOException {
+        Alphabet a = new Alphabet();
         for (int i = 0; i < nMsg; i++) {
             Scanner sc = new Scanner(msgList[i].getMsg());
+            List<String> doc = new ArrayList<String>();
             while (sc.hasNext()) {
                 String word = sc.next().toLowerCase();
-                if (checkWord(word) && !wordList.contains(word)) {
+                if (a.checkWord(word) > 0 && !wordList.contains(word) && word.length() > 3) {
                     wordList.add(word);
                 }
+                if (a.checkWord(word) > 0 && word.length() > 3) {
+                    doc.add(word);
+                }
             }
+            documents.add(doc);
             sc.close();
         }
-        //System.out.println("Wordlist for " + name + " created with " + wordList.size() + " words");
-        //System.out.println(wordList.toString());
+        System.out.println("Wordlist of " + name + " created = [" + wordList.size() + "]");
     }
 
 
@@ -153,25 +158,6 @@ public class User {
     public void printAllMessages() {
         for (int i = 0; i < nMsg; i++)
             System.out.println(msgList[i].toString());
-    }
-
-    boolean checkWord(String word) throws IOException {
-        boolean ok = false;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader("src/alphabet.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        String line;
-        //reads line by line the txt file
-
-        while ((line = br.readLine()) != null && !ok) {
-            if (word.equalsIgnoreCase(line))
-                ok = true;
-        }
-
-        return ok;
     }
 
     public List<String> getWordList() {

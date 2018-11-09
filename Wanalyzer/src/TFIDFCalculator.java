@@ -44,6 +44,7 @@ public class TFIDFCalculator {
      * @return the TF-IDF of term
      */
     public double tfIdf(List<String> doc, List<List<String>> docs, String term) {
+        //System.out.println(tf(doc, term) + " * " + idf(docs, term));
         return tf(doc, term) * idf(docs, term);
 
     }
@@ -69,14 +70,17 @@ public class TFIDFCalculator {
             int n = 0;
             for (List doc : documents) {
                 double total = calculator.tfIdf(doc, documents, s);
-
-                n++;
-                avg += total;
+                if (!Double.isNaN(total)) {
+                    avg += total;
+                    if (total > 0)
+                        n++;
+                }
 
             }
 
-            wordList[m] = new Word(s, avg / n);
+            wordList[m] = new Word(s, avg);
             m++;
+            System.out.println("Word added -> " + s + ": " + avg + "/" + n);
         }
 
         for (int i = 0; i < m - 1; i++) {
@@ -88,7 +92,7 @@ public class TFIDFCalculator {
                 }
             }
         }
-
+        System.out.println("----");
         for (int i = 0; i < 5; i++)
             System.out.println(wordList[i].toString());
 

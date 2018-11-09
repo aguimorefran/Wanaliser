@@ -2,6 +2,7 @@ import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 
 import java.io.*;
+import java.util.*;
 
 public class Conversation {
     private String filename;
@@ -11,8 +12,9 @@ public class Conversation {
     private int nMsg, nFiles;
     private String mostActiveDay;
     private int nDays;
+    Alphabet a = new Alphabet();
 
-    public Conversation(String filename) {
+    public Conversation(String filename) throws IOException {
         this.filename = filename;
         userList = new User[2];
         msgList = new Message[100];
@@ -41,9 +43,9 @@ public class Conversation {
                 if (!userExists(msg.getUser())) {
                     addUser(msg.getUser());
                 }
-                //add analised msg to conversation
+                //add analysed msg to conversation
                 addMsg(msg);
-                //add analised msg to user
+                //add analysed msg to user
                 addMsgToUser(msg.getUser(), msg);
                 //sum files
                 if (msg.isFile()) {
@@ -63,8 +65,8 @@ public class Conversation {
         for (User u : userList)
             u.calcTFIDF();
 
-
     }
+
 
     @Override
     public String toString() {
@@ -122,10 +124,10 @@ public class Conversation {
         sb.append("\nMost active day: " + mostActiveDay + "\n");
 
         for (User u : userList) {
-            sb.append("Most relevant words for " + u.getName() + ":");
-            for (int i = 0; i < u.getWordList().size(); i++) {
-                Word foo = u.getRelevantWords()[i];
-                sb.append("\n" + foo.getWord() + ": " + foo.getValue());
+            sb.append("\nMost relevant words for " + u.getName() + ":\n");
+            for (int i = 0; i < 5; i++) {
+                Word w = u.getRelevantWords()[i];
+                sb.append("\t" + w.getWord() + " -> " + w.getValue() + "\n");
             }
         }
 
@@ -168,6 +170,7 @@ public class Conversation {
             }
         }
         mostActiveDay = date;
+        System.out.println("Most active day calculated");
     }
 
     /*
@@ -179,6 +182,7 @@ public class Conversation {
         }
         userList[nUsers] = new User(username);
         nUsers++;
+        System.out.println("User " + username + " added");
     }
 
     /*
