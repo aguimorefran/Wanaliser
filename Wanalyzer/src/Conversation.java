@@ -108,6 +108,9 @@ public class Conversation {
                 sb.append("\t" + getDoW(j) + "= " + userList[i].getAvgMsgPerDay()[j] + "\n");
             sb.append("\n");
         }
+
+        //TODO: AVG MSGS PER DAY OF WEEK
+
         for (int i = 0; i < nUsers; i++) {
             userList[i].calcAvg();
             sb.append("Avg msgs per hour of day by " + userList[i].getName() + ":\n");
@@ -122,14 +125,6 @@ public class Conversation {
             sb.append("\n");
         }
         sb.append("\nMost active day: " + mostActiveDay + "\n");
-
-        for (User u : userList) {
-            sb.append("\nMost relevant words for " + u.getName() + ":\n");
-            for (int i = 0; i < 5; i++) {
-                Word w = u.getRelevantWords()[i];
-                sb.append("\t" + w.getWord() + " -> " + w.getValue() + "\n");
-            }
-        }
 
 
         return sb.toString();

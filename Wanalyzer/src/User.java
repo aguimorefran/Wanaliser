@@ -49,45 +49,9 @@ public class User {
 
     public void calcTFIDF() throws IOException {
         /*
-        First calc tfidf of every word
+        Create the wordlist of each user
          */
         createWordList();
-        int m = 0;
-        Double k = 0.0;
-        TFIDFCalculator tfidf = new TFIDFCalculator();
-        System.out.println("Comparing " + wordList.size() + " words");
-        for (String s : wordList) {
-            k++;
-            if (k % 10 == 0)
-                System.out.println((k / wordList.size()) * 100 + "%");
-            double avg = 0;
-            int j = 0;
-            for (List doc : documents) {
-                double n = tfidf.tfIdf(doc, documents, s);
-                if (!Double.isNaN(n)) {
-                    avg += n;
-                    if (n > 0)
-                        j++;
-                }
-            }
-
-            if (relevantWords.length == m)
-                relevantWords = java.util.Arrays.copyOf(relevantWords, relevantWords.length + 1);
-
-            relevantWords[m] = new Word(s, avg / j);
-            //System.out.println("Word added: " + s + "/" + avg);
-            m++;
-        }
-
-        /*
-        Then sort them
-         */
-        Arrays.sort(relevantWords, new Comparator<Word>() {
-            @Override
-            public int compare(Word o1, Word o2) {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
     }
 
     public void createWordList() throws IOException {
@@ -104,10 +68,18 @@ public class User {
                     doc.add(word);
                 }
             }
+            Collections.sort(wordList, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return o1.compareTo(o2);
+                }
+            });
             documents.add(doc);
             sc.close();
         }
         System.out.println("Wordlist of " + name + " created = [" + wordList.size() + "]");
+
+        //TODO: REMOVE ACCENTS AND BETTER WORDLIST
     }
 
 

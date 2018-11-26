@@ -75,13 +75,13 @@ public class Message {
         return line;
     }
 
-    public DateTime getDate(){
+    public DateTime getDate() {
         return date;
     }
 
 
     public int getDayOfWeek() {
-        return date.getDayOfWeek()-1;
+        return date.getDayOfWeek() - 1;
     }
 
 
@@ -94,7 +94,7 @@ public class Message {
         return printDate() + "Message= {'" + msg + '}';
     }
 
-    private String printDate(){
+    private String printDate() {
         return date.toString();
     }
 
